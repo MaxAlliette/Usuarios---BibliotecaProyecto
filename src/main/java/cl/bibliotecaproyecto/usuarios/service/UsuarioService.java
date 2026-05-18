@@ -59,17 +59,17 @@ public class UsuarioService {
     }
 
     public List<UsuarioResponseDTO> buscarPorNombreAndApellido(String nombreUsuario, String apellidoUsuario) {
-        return usuarioRepository.findByNombreUsuarioContainingIgnoreCaseAndApellidoUsuarioContainingIgnoreCase(nombreUsuario, apellidoUsuario)
+        return usuarioRepository.findByNombreUsuarioContainingIgnoreCaseAndApellidoPaternoUsuarioContainingIgnoreCase(nombreUsuario, apellidoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     public List<UsuarioResponseDTO> buscarPorCorreo(String correoUsuario) {
-        return usuarioRepository.findByCorreoContainingIgnoreCase(correoUsuario)
+        return usuarioRepository.findByCorreoUsuarioContainingIgnoreCase(correoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     public List<UsuarioResponseDTO> buscarPorEstado(String estadoUsuario) {
-        return usuarioRepository.findByEstadoContainingIgnoreCase(estadoUsuario)
+        return usuarioRepository.findByEstadoUsuarioContainingIgnoreCase(estadoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
