@@ -1,5 +1,6 @@
 package cl.bibliotecaproyecto.usuarios.service;
 
+import cl.bibliotecaproyecto.usuarios.dto.RolDTO;
 import cl.bibliotecaproyecto.usuarios.dto.UsuarioRequestDTO;
 import cl.bibliotecaproyecto.usuarios.dto.UsuarioResponseDTO;
 import cl.bibliotecaproyecto.usuarios.model.Usuario;
@@ -23,6 +24,12 @@ public class UsuarioService {
     private final WebClient webClient;
 
     private UsuarioResponseDTO mapToDTO(Usuario usuario) {
+        RolDTO rol = webClient.get()
+                .uri("/{id}", usuario.getIdRol())
+                .retrieve()
+                .bodyToMono(RolDTO.class)
+                .block();
+
         return new UsuarioResponseDTO(
                 usuario.getId(),
                 usuario.getNombreUsuario(),
@@ -30,23 +37,8 @@ public class UsuarioService {
                 usuario.getApellidoMaternoUsuario(),
                 usuario.getCorreoUsuario(),
                 usuario.getEstadoUsuario(),
-                usuario.getIdRol()
+                rol != null ? rol.getNombreRol() : "Rol no disponible"
         );
-    }
-
-    private void validarRol(Long idRol){
-        try {
-            webClient.get()
-                    .uri("/api/roles/{id}", idRol)
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            log.info("Rol {} validado correctamente", idRol);
-        } catch (WebClientResponseException.NotFound e){
-            throw new RuntimeException("Rol con id " + idRol + " no encontrado");
-        } catch (Exception e){
-            throw new RuntimeException("No se puede conectar con ms-roles: " + e.getMessage());
-        }
     }
 
     public List<UsuarioResponseDTO> obtenerTodos(){
@@ -74,7 +66,6 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO guardar(UsuarioRequestDTO dto){
-        validarRol(dto.getIdRol());
         Usuario usuario = new Usuario(
                 null,
                 dto.getNombreUsuario(),
@@ -89,7 +80,6 @@ public class UsuarioService {
 
     public Optional<UsuarioResponseDTO> actualizar (Long id, UsuarioRequestDTO dto){
         return usuarioRepository.findById(id).map(existente -> {
-            validarRol(dto.getIdRol());
             existente.setNombreUsuario(dto.getNombreUsuario());
             existente.setApellidoPaternoUsuario(dto.getApellidoPaternoUsuario());
             existente.setApellidoMaternoUsuario(dto.getApellidoMaternoUsuario());
