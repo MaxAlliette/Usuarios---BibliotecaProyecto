@@ -31,7 +31,7 @@ public class UsuarioService {
                 .block();
 
         return new UsuarioResponseDTO(
-                usuario.getId(),
+                usuario.getIdUsuario(),
                 usuario.getNombreUsuario(),
                 usuario.getApellidoPaternoUsuario(),
                 usuario.getApellidoMaternoUsuario(),
