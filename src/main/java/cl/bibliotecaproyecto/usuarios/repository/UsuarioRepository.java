@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    List<Usuario> findByNombreUsuarioContainingIgnoreCaseAndApellidoPaternoUsuarioContainingIgnoreCase(
+    List<Usuario> findByNombreUsuarioAndApellidoPaternoUsuario(
             String nombreUsuario, String apellidoUsuario);
 
-    List<Usuario> findByCorreoUsuarioContainingIgnoreCase(
+    List<Usuario> findByCorreoUsuario(
             String correoUsuario);
 
-    List<Usuario> findByEstadoUsuarioContainingIgnoreCase(
+    List<Usuario> findByEstadoUsuario(
             String estadoUsuario);
 }

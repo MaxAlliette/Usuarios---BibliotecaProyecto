@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,17 +50,17 @@ public class UsuarioService {
     }
 
     public List<UsuarioResponseDTO> buscarPorNombreAndApellido(String nombreUsuario, String apellidoUsuario) {
-        return usuarioRepository.findByNombreUsuarioContainingIgnoreCaseAndApellidoPaternoUsuarioContainingIgnoreCase(nombreUsuario, apellidoUsuario)
+        return usuarioRepository.findByNombreUsuarioAndApellidoPaternoUsuario(nombreUsuario, apellidoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     public List<UsuarioResponseDTO> buscarPorCorreo(String correoUsuario) {
-        return usuarioRepository.findByCorreoUsuarioContainingIgnoreCase(correoUsuario)
+        return usuarioRepository.findByCorreoUsuario(correoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     public List<UsuarioResponseDTO> buscarPorEstado(String estadoUsuario) {
-        return usuarioRepository.findByEstadoUsuarioContainingIgnoreCase(estadoUsuario)
+        return usuarioRepository.findByEstadoUsuario(estadoUsuario)
                 .stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
